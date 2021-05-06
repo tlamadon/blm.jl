@@ -1,4 +1,6 @@
-module llmr
+module blm
+
+    export kmeansw
 
     # allow convenient multiple definitions in one line
     macro multidef(ex)
@@ -13,7 +15,7 @@ module llmr
         rex
     end
 
-    include("constraints.jl")
-    include("clustering.jl")
-    include("model.jl")
+    include("modules/clustering.jl")
+    include("modules/constraints.jl")
+    include("modules/model.jl")
 end

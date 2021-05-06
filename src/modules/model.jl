@@ -7,11 +7,13 @@ using Dates
 
 
 """
+`DistributionModel`
+
     Event study BLM model for movers
      - static version
      - dynamic version
 """
-mutable struct DistributionModelES
+mutable struct DistributionModel
     nl::Int  # number of worker types
     nk::Int  # number of firm types
 
@@ -33,7 +35,7 @@ mutable struct DistributionModelES
     dprior :: Float64
 end
 
-function DistributionModelES(nl::Int,nk::Int)
+function DistributionModel(nl::Int,nk::Int)
   
     pk1 = zeros(nk,nk,nl)
     ddir = Distributions.Dirichlet( repeat([2.0], nl))
@@ -51,19 +53,18 @@ function DistributionModelES(nl::Int,nk::Int)
 
     NNm = ones(nk,nk)/(nk*nk)
 
-    DistributionModelES(nl,nk, pk1, A1, S1, A2, S2, NNm, 1.0)
+    DistributionModel(nl,nk, pk1, A1, S1, A2, S2, NNm, 1.0)
 end
 
 # simply copy method for DistributionalModel
-Base.copy(x::DistributionModelES) = DistributionModelES([ copy(getfield(x, k)) for k ∈ fieldnames(DistributionModelES)]...)
+Base.copy(x::DistributionModel) = DistributionModel([ copy(getfield(x, k)) for k ∈ fieldnames(DistributionModel)]...)
 
+"""
+`simulate(model::DistributionModel, nn)`
 
-
-
-# Using the model, simulates a dataset
-# The timing is important, the event happens at the end of the period
-# hence if a current period is u2e there will be no wage in the current period, as well as no firm.
-function simulate(model::DistributionModelES, nn) 
+    Using the model, simulates a dataset. The timing is important, the event happens at the end of the period, hence if a current period is u2e there will be no wage in the current period, as well as no firm.
+"""
+function simulate(model::DistributionModel, nn)
 
     J1  = zeros(Int64,nn)     # firm id when entering the period
     J2  = zeros(Int64,nn)     # firm id when entering the period
@@ -94,9 +95,11 @@ function simulate(model::DistributionModelES, nn)
     return(dd)
 end
 
-# computes the likelihood for
-# each observation i in the data, using the given model
-# for a given value of the unobserved worker heterogeneity
+"""
+`likelihood!(lpt_vec::Array{Float64,2}, W1::Array{Float64,1}, J1::Array{Int64,1}, W2::Array{Float64,1}, J2::Array{Int64,1}, l::Int64, model::DistributionModel)`
+
+    Computes the likelihood for each observation i in the data, using the given model for a given value of the unobserved worker heterogeneity
+"""
 # @fixme make sure input is sorted by worker and time
 function likelihood!(lpt_vec::Array{Float64,2},
                         W1::Array{Float64,1}, 
@@ -104,7 +107,7 @@ function likelihood!(lpt_vec::Array{Float64,2},
                         W2::Array{Float64,1}, 
                         J2::Array{Int64,1},
                         l::Int64,
-                        model::DistributionModelES)
+                        model::DistributionModel)
   
     for ii in 1:length(W1)
         j1 = J1[ii]
@@ -118,7 +121,7 @@ function likelihood!(lpt_vec::Array{Float64,2},
     return()
 end
 
-function distributional_posteriors(dm::DistributionModelES, data::DataFrame)
+function distributional_posteriors(dm::DistributionModel, data::DataFrame)
     nn = size(data,1)
     nl = dm.nl
     
@@ -136,7 +139,7 @@ function distributional_posteriors(dm::DistributionModelES, data::DataFrame)
 end
 
 
-function distributional_posteriors!(lik::Array{Float64,2}, qs::Array{Float64,2}, dm::DistributionModelES, data::DataFrame)
+function distributional_posteriors!(lik::Array{Float64,2}, qs::Array{Float64,2}, dm::DistributionModel, data::DataFrame)
     nn = size(data,1)
     nl = dm.nl
     
@@ -149,7 +152,7 @@ function distributional_posteriors!(lik::Array{Float64,2}, qs::Array{Float64,2},
 end
 
 
-function check_em_step(dm::DistributionModelES,key,val,data)
+function check_em_step(dm::DistributionModel,key,val,data)
     qs,lk = distributional_posteriors(dm, data)
     dm2 = copy(dm)
     setfield!(dm2,key,copy(val))
@@ -197,9 +200,11 @@ end
 
 
 """
+`distributional_em!(dm::DistributionModel, data::DataFrame, maxiter::Int, tol::Float64 = 1e-8; update_level = true, constrained=nothing, iterprint=50, msg="")`
+
     Run the em algorithm on the passed DistributionalModel using the given data
 """
-function distributional_em!(dm::DistributionModelES, data::DataFrame, maxiter::Int, tol::Float64 = 1e-8; update_level = true, constrained=nothing, iterprint=50, msg="")
+function distributional_em!(dm::DistributionModel, data::DataFrame, maxiter::Int, tol::Float64 = 1e-8; update_level = true, constrained=nothing, iterprint=50, msg="")
 
     nl = dm.nl
     nk = dm.nk
@@ -329,7 +334,7 @@ function distributional_em!(dm::DistributionModelES, data::DataFrame, maxiter::I
     return(Dict(:lik => total_lik, :con => con))
 end
 
-function model_connectedness(dm::DistributionModelES)
+function model_connectedness(dm::DistributionModel)
 
     nl = dm.nl
     nk = dm.nk
@@ -354,7 +359,7 @@ function distributional_em_all(data::DataFrame, nl, nk; nstart=10, tol=1e-10, it
 
     all_reps = []
     for rep in 1:nstart
-        dm1 = llmr.DistributionModelES(nl,nk);
+        dm1 = llmr.DistributionModel(nl,nk);
         dm1.dprior = 1.00001
         mm = mean(data.w1)
         ms = 2 * std(data.w1)

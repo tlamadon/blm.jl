@@ -38,6 +38,8 @@ function kmeansw()
 end
 
 """
+`group_firms(y,fids; nq=20,ng=10,nstart=100)`
+
     groups firms based on empirical cdf
     pass a vector of firm ids and a vector of wages, at the individual level 
     nq is number of points for the empirical cdf
