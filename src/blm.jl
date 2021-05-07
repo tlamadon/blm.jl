@@ -15,7 +15,7 @@ module blm
         rex
     end
 
-    include("modules/clustering.jl")
-    include("modules/constraints.jl")
-    include("modules/model.jl")
+    include("grouping/clustering.jl")
+    include("model/constraints.jl")
+    include("model/model.jl")
 end
