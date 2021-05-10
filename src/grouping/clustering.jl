@@ -38,14 +38,14 @@ function kmeansw()
 end
 
 """
-`group_firms(y,fids; nq=20,ng=10,nstart=100)`
+    group_firms(y,fids; nq=20,ng=10,nstart=100)
 
-    groups firms based on empirical cdf
-    pass a vector of firm ids and a vector of wages, at the individual level 
-    nq is number of points for the empirical cdf
-    ng is the number of groups
-    nstart is the number of kmeans to run
-    maxiter for each kmeans is set at 1000
+groups firms based on empirical cdf
+pass a vector of firm ids and a vector of wages, at the individual level 
+nq is number of points for the empirical cdf
+ng is the number of groups
+nstart is the number of kmeans to run
+maxiter for each kmeans is set at 1000
 """
 function group_firms(y,fids; nq=20,ng=10,nstart=100)
 

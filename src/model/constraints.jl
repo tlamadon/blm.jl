@@ -13,9 +13,9 @@ using Suppressor
 ##################
 
 """
-`QPConstrained`
+    QPConstrained
 
-    Constraints structure with keyword arguments (that can have default values)
+Constraints structure with keyword arguments (that can have default values)
 """
 # Source: https://discourse.julialang.org/t/can-a-struct-be-created-with-field-keywords/27531
 # Source: https://discourse.julialang.org/t/initialization-of-mutable-structs-with-many-default-values/17959
@@ -32,14 +32,14 @@ using Suppressor
 end
 
 """
-`AddConstraint(; qp::QPConstrained, constraint::Function, kwargs...)`
+    AddConstraint(; qp::QPConstrained, constraint::Function, kwargs...)
 
-    Add constraint to a QPConstrained object.
+Add constraint to a QPConstrained object.
 
-    Arguments:
-        qp (QPConstrained): instance of QPConstrained
-        constraint (Function): which constraint to use
-        kwargs (kwargs): keyword arguments for the particular constraint (skip nk and nl)
+Arguments:
+    qp (QPConstrained): instance of QPConstrained
+    constraint (Function): which constraint to use
+    kwargs (kwargs): keyword arguments for the particular constraint (skip nk and nl)
 """
 function AddConstraint(; qp::QPConstrained, constraint::Function, kwargs...)
     # Create constraint
@@ -69,14 +69,14 @@ end
 ##################
 
 """
-`QPConstrainedSolve(P::SparseMatrixCSC{Float64, Int64}, q::Vector{Float64}, qp::QPConstrained)`
+    QPConstrainedSolve(P::SparseMatrixCSC{Float64, Int64}, q::Vector{Float64}, qp::QPConstrained)
 
-    Solve constrained QP problem, min_x 0.5x'Px + q'x s.t. l <= Ax <= u.
-    Arguments:
-        P (Matrix): P matrix for QP problem
-        q (Vector): q vector for QP problem
-        constraint (Function): which constraint to use
-        kwargs (kwargs): keyword arguments for the particular constraint
+Solve constrained QP problem, min_x 0.5x'Px + q'x s.t. l <= Ax <= u.
+Arguments:
+    P (Matrix): P matrix for QP problem
+    q (Vector): q vector for QP problem
+    constraint (Function): which constraint to use
+    kwargs (kwargs): keyword arguments for the particular constraint
 """
 function QPConstrainedSolve(P::SparseMatrixCSC{Float64, Int64}, q::Vector{Float64}, qp::QPConstrained)
     #####
@@ -112,18 +112,18 @@ end
 #######################
 
 """
-`ConstraintLinear(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained`
+    ConstraintLinear(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained
 
-    Linear constraint.
-    for a set of coeficient nk x nl x nt this makes sure that
+Linear constraint.
+for a set of coeficient nk x nl x nt this makes sure that
 
-        a_k1_l1_t - a_k2_l1_t = a_k1_l1_t - a_k2_l1_t
-        for all l1, t and 2 firms k1, k2
+    a_k1_l1_t - a_k2_l1_t = a_k1_l1_t - a_k2_l1_t
+    for all l1, t and 2 firms k1, k2
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
-        n_periods (int): number of periods in event study
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
+    n_periods (int): number of periods in event study
 """
 function ConstraintLinear(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained
     A = []
@@ -141,18 +141,18 @@ function ConstraintLinear(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained
 end
 
 """
-`ConstraintPara(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained`
+    ConstraintPara(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained
 
-    Parallel constraint, wokrer get same wage everywhere.
-    For a set of coeficient nk x nl x nt this makes sure that
+Parallel constraint, worker get same wage everywhere.
+For a set of coeficient nk x nl x nt this makes sure that
 
-        a_k1_l_t = a_k2_l_t
-        for all l, t and 2 firms k1, k2
+    a_k1_l_t = a_k2_l_t
+    for all l, t and 2 firms k1, k2
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
-        n_periods (int): number of periods in event study
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
+    n_periods (int): number of periods in event study
 """
 function ConstraintPara(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained
     A = []
@@ -168,14 +168,14 @@ function ConstraintPara(; nk::Int64, nl::Int64, nt::Int64=2)::QPConstrained
 end
 
 """
-`ConstraintAKMMono(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)::QPConstrained`
+    ConstraintAKMMono(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)::QPConstrained
 
-    AKM mono constraint.
+AKM mono constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
-        gap (int): FIXME
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
+    gap (int): FIXME
 """
 function ConstraintAKMMono(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)::QPConstrained
     LL = zeros(Int8, (nl - 1, nl))
@@ -198,14 +198,14 @@ function ConstraintAKMMono(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)
 end
 
 """
-`ConstraintMonoK(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)::QPConstrained`
+    ConstraintMonoK(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)::QPConstrained
 
-    Mono K constraint.
+Mono K constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
-        gap (int): FIXME
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
+    gap (int): FIXME
 """
 function ConstraintMonoK(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)::QPConstrained
     KK = zeros(Int8, (nk - 1, nk))
@@ -220,14 +220,14 @@ function ConstraintMonoK(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0)::
 end
 
 """
-`ConstraintFixB(; nk::Int64, nl::Int64, nt::Int64=4)::QPConstrained`
+    ConstraintFixB(; nk::Int64, nl::Int64, nt::Int64=4)::QPConstrained
 
-    Fix B constraint.
+Fix B constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
-        nt (int): FIXME
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
+    nt (int): FIXME
 """
 function ConstraintFixB(; nk::Int64, nl::Int64, nt::Int64=4)::QPConstrained
     KK = zeros(Int8, (nk - 1, nk))
@@ -249,15 +249,15 @@ function ConstraintFixB(; nk::Int64, nl::Int64, nt::Int64=4)::QPConstrained
 end
 
 """
-`ConstraintBiggerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0, n_periods::Int64=2)::QPConstrained`
+    ConstraintBiggerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0, n_periods::Int64=2)::QPConstrained
 
-    Bigger than constraint.
+Bigger than constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
-        gap (int): lower bound
-        n_periods (int): number of periods in event study
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
+    gap (int): lower bound
+    n_periods (int): number of periods in event study
 """
 function ConstraintBiggerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0, n_periods::Int64=2)::QPConstrained
     G = - I(n_periods * nk * nl)
@@ -267,15 +267,15 @@ function ConstraintBiggerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}
 end
 
 """
-`ConstraintSmallerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0, n_periods::Int64=2)::QPConstrained`
+    ConstraintSmallerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0, n_periods::Int64=2)::QPConstrained
 
-    Bigger than constraint.
+Bigger than constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
-        gap (int): upper bound
-        n_periods (int): number of periods in event study
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
+    gap (int): upper bound
+    n_periods (int): number of periods in event study
 """
 function ConstraintSmallerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64}=0, n_periods::Int64=2)::QPConstrained
     G = I(n_periods * nk * nl)
@@ -285,13 +285,13 @@ function ConstraintSmallerThan(; nk::Int64, nl::Int64, gap::Union{Float64, Int64
 end
 
 """
-`ConstraintStationary(; nk::Int64, nl::Int64)::QPConstrained`
+    ConstraintStationary(; nk::Int64, nl::Int64)::QPConstrained
 
-    Stationary constraint.
+Stationary constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
 """
 function ConstraintStationary(; nk::Int64, nl::Int64)::QPConstrained
     LL = zeros(Int8, (nl - 1, nl))
@@ -306,13 +306,13 @@ function ConstraintStationary(; nk::Int64, nl::Int64)::QPConstrained
 end
 
 """
-`ConstraintNone(; nk::Int64, nl::Int64)::QPConstrained`
+    ConstraintNone(; nk::Int64, nl::Int64)::QPConstrained
 
-    No constraint.
+No constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
 """
 function ConstraintNone(; nk::Int64, nl::Int64)::QPConstrained
     G = - zeros(Int8, (1, nk * nl))
@@ -322,13 +322,13 @@ function ConstraintNone(; nk::Int64, nl::Int64)::QPConstrained
 end
 
 """
-`ConstraintSum(; nk::Int64, nl::Int64)::QPConstrained`
+    ConstraintSum(; nk::Int64, nl::Int64)::QPConstrained
 
-    Sum constraint.
+Sum constraint.
 
-    Arguments:
-        nk (int): number of firm types
-        nl (int): number of worker types
+Arguments:
+    nk (int): number of firm types
+    nl (int): number of worker types
 """
 function ConstraintSum(; nk::Int64, nl::Int64)::QPConstrained
     A = - kron(I(nl), transpose(ones(Int8, nk)))

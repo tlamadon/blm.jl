@@ -7,11 +7,11 @@ using Dates
 
 
 """
-`DistributionModel`
+    DistributionModel
 
-    Event study BLM model for movers
-     - static version
-     - dynamic version
+Event study BLM model for movers
+    - static version
+    - dynamic version
 """
 mutable struct DistributionModel
     nl::Int  # number of worker types
@@ -60,9 +60,14 @@ end
 Base.copy(x::DistributionModel) = DistributionModel([ copy(getfield(x, k)) for k ∈ fieldnames(DistributionModel)]...)
 
 """
-`simulate(model::DistributionModel, nn)`
+    simulate(model::DistributionModel, nn)
 
-    Using the model, simulates a dataset. The timing is important, the event happens at the end of the period, hence if a current period is u2e there will be no wage in the current period, as well as no firm.
+Using the model, simulates a dataset.
+The timing is important, the event
+happens at the end of the period,
+hence if a current period is u2e there
+will be no wage in the current period,
+as well as no firm.
 """
 function simulate(model::DistributionModel, nn)
 
@@ -96,9 +101,11 @@ function simulate(model::DistributionModel, nn)
 end
 
 """
-`likelihood!(lpt_vec::Array{Float64,2}, W1::Array{Float64,1}, J1::Array{Int64,1}, W2::Array{Float64,1}, J2::Array{Int64,1}, l::Int64, model::DistributionModel)`
+    likelihood!(lpt_vec::Array{Float64,2}, W1::Array{Float64,1}, J1::Array{Int64,1}, W2::Array{Float64,1}, J2::Array{Int64,1}, l::Int64, model::DistributionModel)
 
-    Computes the likelihood for each observation i in the data, using the given model for a given value of the unobserved worker heterogeneity
+Computes the likelihood for each observation
+i in the data, using the given model for a
+given value of the unobserved worker heterogeneity
 """
 # @fixme make sure input is sorted by worker and time
 function likelihood!(lpt_vec::Array{Float64,2},
@@ -200,9 +207,10 @@ end
 
 
 """
-`distributional_em!(dm::DistributionModel, data::DataFrame, maxiter::Int, tol::Float64 = 1e-8; update_level = true, constrained=nothing, iterprint=50, msg="")`
+    distributional_em!(dm::DistributionModel, data::DataFrame, maxiter::Int, tol::Float64 = 1e-8; update_level = true, constrained=nothing, iterprint=50, msg="")
 
-    Run the em algorithm on the passed DistributionalModel using the given data
+Run the em algorithm on the passed
+DistributionalModel using the given data
 """
 function distributional_em!(dm::DistributionModel, data::DataFrame, maxiter::Int, tol::Float64 = 1e-8; update_level = true, constrained=nothing, iterprint=50, msg="")
 
