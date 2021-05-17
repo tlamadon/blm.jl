@@ -2,10 +2,10 @@
 # Source: https://discourse.julialang.org/t/continuous-integration-with-circle-ci/11642/8
 version: 2.1
 orbs:
-  codecov: codecov/codecov@1.0.2 # Need to allow 3rd party orbs in project settings on circleci
+  codecov: codecov/codecov@1.2.0 # Need to allow 3rd party orbs in project settings on circleci
 jobs:
   build:
-    working_directory: /root/project/blm.jl # Clone into a directory whose name matches your Package.
+    working_directory: /root/project/blm # Clone into a directory whose name matches your Package.
     docker:
       - image: julia:1.6 # image comes from Docker hub
     steps:
