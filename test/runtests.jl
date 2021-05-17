@@ -4,7 +4,12 @@ using Test
 # using Statistics
 using Random
 
-@test 1 == 1
+@testset "testing basic" begin
+    nl = 4
+    nk = 6
+    dm = blm.DistributionModel(nl,nk);
+    @test 1 == 1
+end
 
 # @testset "testing model parameters" begin
 
