@@ -12,10 +12,11 @@ jobs:
       - checkout
       - run:
           name: Install and Test this package
-          command: julia -e  'using Pkg; Pkg.activate("."); Pkg.test("blm", coverage=true);' # julia --project --check-bounds=yes -e 'import Pkg; Pkg.build(); Pkg.test("blm"; coverage=true)' # julia -e  'using Pkg; Pkg.update(); Pkg.clone(pwd()); Pkg.build("blm"); Pkg.test("blm", coverage=true);'
+          command: julia --project --check-bounds=yes -e  'import Pkg; Pkg.build(); Pkg.test("blm", coverage=true)' # julia --project --check-bounds=yes -e 'import Pkg; Pkg.build(); Pkg.test("blm"; coverage=true)' # julia -e  'using Pkg; Pkg.update(); Pkg.clone(pwd()); Pkg.build("blm"); Pkg.test("blm", coverage=true);'
       - run:
           name: Process code-coverage
-          command: julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())' # julia -e 'using Pkg; cd(Pkg.dir("MyPkg")); Pkg.add("Coverage"); using Coverage; coverage = process_folder(); LCOV.writefile("coverage-lcov.info", coverage)'
-      # - codecov/upload:
-      #     file: "coverage-lcov.info"
+          command: julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; LCOV.writefile(".coverage", process_folder())' # julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())' # julia -e 'using Pkg; cd(Pkg.dir("MyPkg")); Pkg.add("Coverage"); using Coverage; coverage = process_folder(); LCOV.writefile("coverage-lcov.info", coverage)'
+          # julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; LCOV.writefile(".coverage", process_folder())'
+      - codecov/upload:
+          file: ".coverage"
       #     token: "..." # get from https://codecov.io/gh/github-name/MyPkg.jl/settings
