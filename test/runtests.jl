@@ -1,7 +1,7 @@
 # include("src/all.jl")
 using blm
 using Test
-using Statistics
+# using Statistics
 using Random
 
 @testset "testing model parameters" begin
