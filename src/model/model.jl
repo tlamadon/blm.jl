@@ -71,9 +71,12 @@ as well as no firm.
 """
 function simulate(model::DistributionModel, nn)
 
-    J1  = zeros(Int64,nn)     # firm id when entering the period
-    J2  = zeros(Int64,nn)     # firm id when entering the period
-    L   = zeros(Int64,nn)     # firm id when entering the period 
+    J1  = zeros(Int64,nn)     # firm type when entering the period
+    J2  = zeros(Int64,nn)     # firm type when ending the period
+    nf = 10 # number of firm ids per firm type
+    F1  = zeros(Int64,nn)     # firm id when entering the period
+    F2  = zeros(Int64,nn)     # firm id when ending the period
+    L   = zeros(Int64,nn)     # firm type last period
     W1  = zeros(Float64,nn)   # wage if employed
     W2  = zeros(Float64,nn)   # wage if employed
 
@@ -83,6 +86,8 @@ function simulate(model::DistributionModel, nn)
     for i in 1:nn 
         k1 = sample( 1:model.nk )
         k2 = sample( 1:model.nk )
+        f1 = sample(nf * (k1 - 1) + 1:nf * k1)
+        f2 = sample(nf * (k2 - 1):nf * k2)
 
         #  -----  draw worker and firm ------- #
         l    = wsample( 1:model.nl , model.pk1[k1,k2,:])
@@ -92,11 +97,13 @@ function simulate(model::DistributionModel, nn)
         W2[i] = model.A2[k2,l] + model.S2[k2,l] * randn()  # wage next period
         J1[i] = k1
         J2[i] = k2
+        F1[i] = f1
+        F2[i] = f2
         L[i] = l
 
     end # end of loop on i
 
-    dd = DataFrame(i=1:nn, j1=J1, j2=J2, w1=W1, w2=W2, l=L)
+    dd = DataFrame(i=1:nn, j1=J1, j2=J2, w1=W1, w2=W2, l=L, f1=F1, f2=F2)
     return(dd)
 end
 

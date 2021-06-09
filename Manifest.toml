@@ -27,6 +27,11 @@ git-tree-sha1 = "c3598e525718abcc440f69cc6d5f60dda0a1b61e"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.6+5"
 
+[[Chain]]
+git-tree-sha1 = "7c845bdbbf8c47e62f88a63e9cbc09bd1785a01d"
+uuid = "8be319e6-bccf-4806-a6f7-6fae938471bc"
+version = "0.4.6"
+
 [[ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
 git-tree-sha1 = "bd0cc939d94b8bd736dce5bbbe0d635db9f94af7"
